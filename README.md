@@ -1,2 +1,5 @@
-# sergen-tpl-default
-Default template for service generation
+Sergen Default Template
+==================
+
+
+Default template for generating a new service with digitalozon/sergen
