@@ -1,6 +1,6 @@
 use rocket_contrib::databases::diesel;
 
-{{mod-tables-definitions}}
+{{mod-repos-definitions}}
 
 #[database("diesel_postgres_pool")]
 pub struct Conn(diesel::PgConnection);
