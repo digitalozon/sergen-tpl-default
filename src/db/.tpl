@@ -11,7 +11,7 @@ use serde::Deserialize;
 #[derive(Insertable)]
 #[table_name = "{{table}}"]
 pub struct New{{Table-singular}}<'a> {
-{{insertable-tbl-fields}}
+{{insertable-tbl-fields-with-datatypes}}
 }
 
 pub enum {{Table-singular}}CreationError {
@@ -32,11 +32,11 @@ impl From<Error> for {{Table-singular}}CreationError {
 
 pub fn create(
     conn: &Conn,
-    name: &str,
+    {{insertable-tbl-fields-with-datatypes}}
 ) -> Result<{{Table-singular}}, {{Table-singular}}CreationError> {
 
     let new_{{table-singular}} = &New{{Table-singular}} {
-        name,
+    {{insertable-tbl-fields}}
     };
 
     diesel::insert_into({{table}}::table)
