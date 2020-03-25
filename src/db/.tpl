@@ -3,14 +3,13 @@ use crate::models::{{table-singular}}::*;
 use crate::schema::{{table}};
 use std::ops::Deref;
 
-use crypto::scrypt::{scrypt_check, scrypt_simple, ScryptParams};
 use diesel::prelude::*;
 use diesel::result::{DatabaseErrorKind, Error};
 use serde::Deserialize;
 
 #[derive(Insertable)]
 #[table_name = "{{table}}"]
-pub struct New{{Table-singular}}<'a> {
+pub struct New{{Table-singular}} {
 {{insertable-tbl-fields-def}}
 }
 
