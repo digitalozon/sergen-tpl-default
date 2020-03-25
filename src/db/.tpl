@@ -11,7 +11,7 @@ use serde::Deserialize;
 #[derive(Insertable)]
 #[table_name = "{{table}}"]
 pub struct New{{Table-singular}}<'a> {
-{{insertable-tbl-fields-with-datatypes}}
+{{insertable-tbl-fields-def}}
 }
 
 pub enum {{Table-singular}}CreationError {
