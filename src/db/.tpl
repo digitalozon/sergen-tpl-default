@@ -79,7 +79,7 @@ pub fn delete(conn: &Conn, id: i32) {
 #[derive(Deserialize, AsChangeset, Default, Clone)]
 #[table_name = "{{table}}"]
 pub struct Update{{Table-singular}}Data {
-    name: Option<String>,
+{{updateable-tbl-fields-def}}
 }
 
 pub fn update(conn: &Conn, id: i32, data: &Update{{Table-singular}}Data) -> Option<{{Table-singular}}> {
