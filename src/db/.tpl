@@ -32,11 +32,11 @@ impl From<Error> for {{Table-singular}}CreationError {
 
 pub fn create(
     conn: &Conn,
-    {{insertable-tbl-fields-with-datatypes}}
+{{insertable-tbl-fields-with-datatypes}}
 ) -> Result<{{Table-singular}}, {{Table-singular}}CreationError> {
 
     let new_{{table-singular}} = &New{{Table-singular}} {
-    {{insertable-tbl-fields}}
+{{insertable-tbl-fields}}
     };
 
     diesel::insert_into({{table}}::table)
