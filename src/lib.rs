@@ -54,7 +54,7 @@ pub fn rocket() -> rocket::Rocket {
         .mount(
             "/api",
             routes![
-                {% for table in tebles %}
+                {% for table in tables %}
                    "routes::{{table.name_plural}}::post_{{table.name_singular}},",
                    "routes::{{table.name_plural}}::put_{{table.name_singular}},",
                    "routes::{{table.name_plural}}::get_{{table.name_plural}},",
