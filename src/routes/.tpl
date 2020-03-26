@@ -15,8 +15,7 @@ pub struct New{{ table.name_singular | title }} {
 
 #[derive(Deserialize, Validate)]
 struct New{{ table.name_singular | title }}Data {
-    {% for field in table.fields %}
-        {% if field.key == "id" %}{% continue %}{% endif %}
+    {% for field in table.fields %} {% if field.key == "id" %}{% continue %}{% endif %}
         pub {{ field.key }}: {{ field.datatype | to_rust_datatype }},
     {% endfor %}
 }
@@ -32,8 +31,7 @@ pub fn post_{{ table.name_singular }}(
     let mut extractor = FieldValidator::validate(&new_{{ table.name_singular }});
 
     // Prepare all fields for inserting (validation)
-    {% for field in table.fields %}
-        {% if field.key == "id" %}{% continue %}{% endif %}
+    {% for field in table.fields %} {% if field.key == "id" %}{% continue %}{% endif %}
         // TODO: Hande Optional like this
         // let {{ field.key }} = extractor.extract("{{ field.key }}", new_{{ table.name_singular }}.{{ field.key }});
         let {{ field.key }} = new_{{ table.name_singular }}.{{ field.key }};
