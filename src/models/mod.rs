@@ -1,3 +1,3 @@
 {% for table in tables %}
-pub mod {{table.name_singilar}};
+pub mod {{table.name_singular}};
 {% endfor %}
