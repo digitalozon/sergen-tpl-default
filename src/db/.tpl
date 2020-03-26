@@ -54,7 +54,7 @@ pub fn create(
 }
 
 
-/// Return a list of all {{Table}}
+/// Return a list of all {{ table.name_plural | title }}
 /// TODO: Pagination
 pub fn find(conn: &Conn) -> Option<{{ table.name_singular | title }}List> {
 
