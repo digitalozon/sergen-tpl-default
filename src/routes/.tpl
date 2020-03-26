@@ -41,7 +41,7 @@ pub fn post_{{ table.name_singular }}(
 
     extractor.check()?;
 
-    db::{{ table.name_plural }}::create(&conn {% for field in table.fields %} {% if field.key == "id" %}{% continue %}{% endif %} , &{{ field.key }} {% endfor %})
+    db::{{ table.name_plural }}::create(&conn {% for field in table.fields %} {% if field.key == "id" %}{% continue %}{% endif %} , {{ field.key }} {% endfor %})
         .map(|{{ table.name_singular }}| json!({ "{{ table.name_singular }}": {{ table.name_singular }}.before_insert() }))
         .map_err(|error| {
             let field = match error {
