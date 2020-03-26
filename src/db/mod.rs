@@ -1,6 +1,8 @@
 use rocket_contrib::databases::diesel;
 
-{{mod-repos-definitions}}
+{% for table in tables %}
+pub mod {{table.name_plural}};
+{% endfor %}
 
 #[database("diesel_postgres_pool")]
 pub struct Conn(diesel::PgConnection);
