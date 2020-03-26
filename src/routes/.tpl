@@ -5,69 +5,77 @@ use validator::Validate;
 
 use crate::auth::{ApiKey, Auth};
 use crate::config::AppState;
-use crate::db::{self, {{table}}::{{Table-singular}}CreationError};
+use crate::db::{self, {{ table.name_plural }}::{{ table.name_singular | title }}CreationError};
 use crate::errors::{Errors, FieldValidator};
 
 #[derive(Deserialize)]
-pub struct New{{Table-singular}} {
-    {{table-singular}}: New{{Table-singular}}Data,
+pub struct New{{ table.name_singular | title }} {
+    {{ table.name_singular }}: New{{ table.name_singular | title }}Data,
 }
 
 #[derive(Deserialize, Validate)]
-struct New{{Table-singular}}Data {
-{{insertable-tbl-fields-def}}
+struct New{{ table.name_singular | title }}Data {
+    {% for field in table.fields %}
+        {% if field.key == "id" %}{% continue %}{% endif %}
+        pub {{ field.key }}: {{ field.datatype | to_rust_datatype }},
+    {% endfor %}
 }
 
-#[post("/{{table}}", format = "json", data = "<new_{{table-singular}}>")]
-pub fn post_{{table-singular}}(
-    new_{{table-singular}}: Json<New{{Table-singular}}>,
+#[post("/{{ table.name_plural }}", format = "json", data = "<new_{{ table.name_singular }}>")]
+pub fn post_{{ table.name_singular }}(
+    new_{{ table.name_singular }}: Json<New{{ table.name_singular | title }}>,
     conn: db::Conn,
     state: State<AppState>,
 ) -> Result<JsonValue, Errors> {
-    let new_{{table-singular}} = new_{{table-singular}}.into_inner().{{table-singular}};
+    let new_{{ table.name_singular }} = new_{{ table.name_singular }}.into_inner().{{ table.name_singular }};
 
-    let mut extractor = FieldValidator::validate(&new_{{table-singular}});
-    let name = extractor.extract("name", new_{{table-singular}}.name);
+    let mut extractor = FieldValidator::validate(&new_{{ table.name_singular }});
+
+    // Prepare all fields for inserting (validation)
+    {% for field in table.fields %}
+    let {{ field.key }} = extractor.extract("{{ field.key }}", new_{{ table.name_singular }}.{{ field.key }});
+    {% endfor %}
 
     extractor.check()?;
 
-    db::{{table}}::create(&conn, &name)
-        .map(|{{table-singular}}| json!({ "{{table-singular}}": {{table-singular}}.before_insert() }))
+    db::{{ table.name_plural }}::create(&conn {% for field in table.fields %} , &{{ field.key }} {% endfor %})
+        .map(|{{ table.name_singular }}| json!({ "{{ table.name_singular }}": {{ table.name_singular }}.before_insert() }))
         .map_err(|error| {
             let field = match error {
-                {{Table-singular}}CreationError::Duplicated{{Table-singular}}Name => "name",
+                // TODO: "name"?
+                {{ table.name_singular | title }}CreationError::Duplicated{{ table.name_singular | title }}Name => "name",
             };
             Errors::new(&[(field, "has already been taken")])
         })
 }
 
-#[get("/{{table}}")]
-pub fn get_{{table}}(_key: ApiKey, conn: db::Conn) -> Option<JsonValue> {
-    db::{{table}}::find(&conn).map(|{{table-singular}}| json!({{table-singular}}))
+#[get("/{{ table.name_plural }}")]
+pub fn get_{{ table.name_plural }}(_key: ApiKey, conn: db::Conn) -> Option<JsonValue> {
+    db::{{ table.name_plural }}::find(&conn).map(|{{ table.name_singular }}| json!({{ table.name_singular }}))
 }
 
-#[get("/{{table}}/<id>")]
-pub fn get_{{table-singular}}(_key: ApiKey, id: i32, conn: db::Conn) -> Option<JsonValue> {
-    db::{{table}}::find_one(&conn, id).map(|{{table-singular}}| json!({ "{{table-singular}}": {{table-singular}} }))
+#[get("/{{ table.name_plural }}/<id>")]
+pub fn get_{{ table.name_singular }}(_key: ApiKey, id: i32, conn: db::Conn) -> Option<JsonValue> {
+    db::{{ table.name_plural }}::find_one(&conn, id).map(|{{ table.name_singular }}| json!({ "{{ table.name_singular }}": {{ table.name_singular }} }))
 }
 
 #[derive(Deserialize)]
-pub struct Update{{Table-singular}} {
-    {{table-singular}}: db::{{table}}::Update{{Table-singular}}Data,
+pub struct Update{{ table.name_singular | title }} {
+    {{ table.name_singular }}: db::{{ table.name_plural }}::Update{{ table.name_singular | title }}Data,
 }
 
-#[put("/{{table}}", format = "json", data = "<{{table-singular}}>")]
-pub fn put_{{table-singular}}(
-    {{table-singular}}: Json<Update{{Table-singular}}>,
+#[put("/{{ table.name_plural }}", format = "json", data = "<{{ table.name_singular }}>")]
+pub fn put_{{ table.name_singular }}(
+    {{ table.name_singular }}: Json<Update{{ table.name_singular | title }}>,
     auth: Auth,
     conn: db::Conn,
     state: State<AppState>,
 ) -> Option<JsonValue> {
-    db::{{table}}::update(&conn, auth.id, &{{table-singular}}.{{table-singular}})
-        .map(|{{table-singular}}| json!({ "{{table-singular}}": {{table-singular}}.before_insert() }))
+    db::{{ table.name_plural }}::update(&conn, auth.id, &{{ table.name_singular }}.{{ table.name_singular }})
+        .map(|{{ table.name_singular }}| json!({ "{{ table.name_singular }}": {{ table.name_singular }}.before_insert() }))
 }
 
-#[delete("/{{table}}/<id>")]
-pub fn delete_{{table-singular}}(id: i32, _auth: Auth, conn: db::Conn) {
-    db::{{table}}::delete(&conn, id);
+#[delete("/{{ table.name_plural }}/<id>")]
+pub fn delete_{{ table.name_singular }}(id: i32, _auth: Auth, conn: db::Conn) {
+    db::{{ table.name_plural }}::delete(&conn, id);
 }
