@@ -33,12 +33,13 @@ pub fn post_{{ table.name_singular }}(
 
     // Prepare all fields for inserting (validation)
     {% for field in table.fields %}
-    let {{ field.key }} = extractor.extract("{{ field.key }}", new_{{ table.name_singular }}.{{ field.key }});
+        {% if field.key == "id" %}{% continue %}{% endif %}
+        let {{ field.key }} = extractor.extract("{{ field.key }}", new_{{ table.name_singular }}.{{ field.key }});
     {% endfor %}
 
     extractor.check()?;
 
-    db::{{ table.name_plural }}::create(&conn {% for field in table.fields %} , &{{ field.key }} {% endfor %})
+    db::{{ table.name_plural }}::create(&conn {% for field in table.fields %} {% if field.key == "id" %}{% continue %}{% endif %} , &{{ field.key }} {% endfor %})
         .map(|{{ table.name_singular }}| json!({ "{{ table.name_singular }}": {{ table.name_singular }}.before_insert() }))
         .map_err(|error| {
             let field = match error {
