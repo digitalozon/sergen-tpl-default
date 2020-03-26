@@ -14,7 +14,7 @@ pub struct {{ table.name_singular | title }}List {
 
 
 impl {{ table.name_singular | title }} {
-  pub fn before_insert(&self) -> {{ table.name_singular | title }} {
+  pub fn before_insert(&self) -> &{{ table.name_singular | title }} {
      // TODO:
      self
    }

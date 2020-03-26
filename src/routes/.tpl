@@ -34,7 +34,9 @@ pub fn post_{{ table.name_singular }}(
     // Prepare all fields for inserting (validation)
     {% for field in table.fields %}
         {% if field.key == "id" %}{% continue %}{% endif %}
-        let {{ field.key }} = extractor.extract("{{ field.key }}", new_{{ table.name_singular }}.{{ field.key }});
+        // TODO: Hande Optional like this
+        // let {{ field.key }} = extractor.extract("{{ field.key }}", new_{{ table.name_singular }}.{{ field.key }});
+        let {{ field.key }} = new_{{ table.name_singular }}.{{ field.key }};
     {% endfor %}
 
     extractor.check()?;
