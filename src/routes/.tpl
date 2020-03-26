@@ -24,11 +24,11 @@ struct New{{ table.name_singular | title }}Data {
 pub fn post_{{ table.name_singular }}(
     new_{{ table.name_singular }}: Json<New{{ table.name_singular | title }}>,
     conn: db::Conn,
-    state: State<AppState>,
+    _state: State<AppState>,
 ) -> Result<JsonValue, Errors> {
     let new_{{ table.name_singular }} = new_{{ table.name_singular }}.into_inner().{{ table.name_singular }};
 
-    let mut extractor = FieldValidator::validate(&new_{{ table.name_singular }});
+    let extractor = FieldValidator::validate(&new_{{ table.name_singular }});
 
     // Prepare all fields for inserting (validation)
     {% for field in table.fields %} {% if field.key == "id" %}{% continue %}{% endif %}
@@ -70,7 +70,7 @@ pub fn put_{{ table.name_singular }}(
     {{ table.name_singular }}: Json<Update{{ table.name_singular | title }}>,
     auth: Auth,
     conn: db::Conn,
-    state: State<AppState>,
+    _state: State<AppState>,
 ) -> Option<JsonValue> {
     db::{{ table.name_plural }}::update(&conn, auth.id, &{{ table.name_singular }}.{{ table.name_singular }})
         .map(|{{ table.name_singular }}| json!({ "{{ table.name_singular }}": {{ table.name_singular }}.before_insert() }))

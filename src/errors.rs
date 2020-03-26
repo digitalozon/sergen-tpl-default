@@ -75,6 +75,9 @@ impl FieldValidator {
         }
     }
 
+    /// This is used only for optional fields,
+    /// so it is possible that sometimes is not used / needed
+    #[allow(dead_code)]
     pub fn extract<T>(&mut self, field_name: &'static str, field: Option<T>) -> T
     where
         T: Default,

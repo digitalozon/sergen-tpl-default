@@ -22,7 +22,12 @@ pub struct Auth {
     pub id: i32,
 }
 
+
 impl Auth {
+
+    /// This is used when we want to create new tokens,
+    /// which is not usual for other services than auth service (users)
+    #[allow(dead_code)]
     pub fn token(&self, secret: &[u8]) -> String {
         jwt::encode(&jwt::Header::default(), self, secret).expect("jwt")
     }
