@@ -15,8 +15,7 @@ pub struct New{{Table-singular}} {
 
 #[derive(Deserialize, Validate)]
 struct New{{Table-singular}}Data {
-    #[validate(length(min = 1))]
-    name: Option<String>,
+{{insertable-tbl-fields-def}}
 }
 
 #[post("/{{table}}", format = "json", data = "<new_{{table-singular}}>")]
