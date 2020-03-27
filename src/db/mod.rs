@@ -6,11 +6,11 @@ pub mod {{table.name_plural}};
 
 
 {% if database_type == "sqlite" %}
-{% set db_conn = "Pg" %}
-{% set db_pck = "pg" %}
-{% elif database_type == "postgres" %}
 {% set db_conn = "Sqlite" %}
 {% set db_pck = "sqlite" %}
+{% elif database_type == "postgres" %}
+{% set db_conn = "Pg" %}
+{% set db_pck = "pg" %}
 {% else %}
 {% set db_conn = "Pg" %}
 {% set db_pck = "pg" %}
