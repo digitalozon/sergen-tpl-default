@@ -46,7 +46,7 @@ pub fn from_env() -> Config {
     let database_url =
         env::var("DATABASE_URL").expect("No DATABASE_URL environment variable found");
     database_config.insert("url", Value::from(database_url));
-    databases.insert("diesel_postgres_pool", Value::from(database_config));
+    databases.insert("diesel_{{ database_type }}_pool", Value::from(database_config));
 
     Config::build(environment)
         .environment(environment)

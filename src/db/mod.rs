@@ -4,10 +4,24 @@ use rocket_contrib::databases::diesel;
 pub mod {{table.name_plural}};
 {% endfor %}
 
-#[database("diesel_postgres_pool")]
-pub struct Conn(diesel::PgConnection);
 
-use diesel::pg::Pg;
+{% if database_type == "sqlite" %}
+{% set db_conn = "Pg" %}
+{% set db_pck = "pg" %}
+{% elif database_type == "postgres" %}
+{% set db_conn = "Sqlite" %}
+{% set db_pck = "sqlite" %}
+{% else %}
+{% set db_conn = "Pg" %}
+{% set db_pck = "pg" %}
+{% endif %}
+
+
+#[database("diesel_{{ database_type }}_pool")]
+pub struct Conn(diesel::{{ db_conn }}Connection);
+
+
+use diesel::{{ db_pck }}::{{ db_conn }};
 use diesel::prelude::*;
 use diesel::query_builder::*;
 use diesel::query_dsl::methods::LoadQuery;
@@ -36,9 +50,9 @@ pub struct OffsetLimited<T> {
 
 impl<T> OffsetLimited<T> {
     #[allow(dead_code)]
-    pub fn load_and_count<U>(self, conn: &PgConnection) -> QueryResult<(Vec<U>, i64)>
+    pub fn load_and_count<U>(self, conn: &{{ db_conn }}Connection) -> QueryResult<(Vec<U>, i64)>
     where
-        Self: LoadQuery<PgConnection, (U, i64)>,
+        Self: LoadQuery<{{ db_conn }}Connection, (U, i64)>,
     {
         let results = self.load::<(U, i64)>(conn)?;
         let total = results.get(0).map(|x| x.1).unwrap_or(0);
@@ -51,13 +65,13 @@ impl<T: Query> Query for OffsetLimited<T> {
     type SqlType = (T::SqlType, BigInt);
 }
 
-impl<T> RunQueryDsl<PgConnection> for OffsetLimited<T> {}
+impl<T> RunQueryDsl<{{ db_conn }}Connection> for OffsetLimited<T> {}
 
-impl<T> QueryFragment<Pg> for OffsetLimited<T>
+impl<T> QueryFragment<{{ db_conn }}> for OffsetLimited<T>
 where
-    T: QueryFragment<Pg>,
+    T: QueryFragment<{{ db_conn }}>,
 {
-    fn walk_ast(&self, mut out: AstPass<Pg>) -> QueryResult<()> {
+    fn walk_ast(&self, mut out: AstPass<{{ db_conn }}>) -> QueryResult<()> {
         out.push_sql("SELECT *, COUNT(*) OVER () FROM (");
         self.query.walk_ast(out.reborrow())?;
         out.push_sql(") t LIMIT ");
