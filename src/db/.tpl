@@ -12,7 +12,7 @@ use serde::Deserialize;
 pub struct New{{ table.name_singular | title }} {
     {% for field in table.fields %}
         {% if field.key == "id" %}{% continue %}{% endif %}
-        pub {{ field.key }}: {{ field.datatype | to_rust_datatype }},
+        pub {{ field.key }}: {{ field | to_rust_datatype }},
     {% endfor %}
 }
 
@@ -36,7 +36,7 @@ pub fn create(
     conn: &Conn,
     {% for field in table.fields %}
     {% if field.key == "id" %}{% continue %}{% endif %}
-    {{ field.key }}: {{ field.datatype | to_rust_datatype }},
+    {{ field.key }}: {{ field | to_rust_datatype }},
     {% endfor %}
 ) -> Result<{{ table.name_singular | title }}, {{ table.name_singular | title }}CreationError> {
 
@@ -89,7 +89,7 @@ pub fn delete(conn: &Conn, id: i32) {
 pub struct Update{{ table.name_singular | title }}Data {
     {% for field in table.fields %}
     {% if field.key == "id" %}{% continue %}{% endif %}
-    pub {{ field.key }}: {{ field.datatype | to_rust_datatype }},
+    pub {{ field.key }}: {{ field | to_rust_datatype }},
     {% endfor %}
 }
 

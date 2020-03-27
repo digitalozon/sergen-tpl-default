@@ -16,7 +16,7 @@ pub struct New{{ table.name_singular | title }} {
 #[derive(Deserialize, Validate)]
 struct New{{ table.name_singular | title }}Data {
     {% for field in table.fields %} {% if field.key == "id" %}{% continue %}{% endif %}
-        pub {{ field.key }}: {{ field.datatype | to_rust_datatype }},
+        pub {{ field.key }}: {{ field | to_rust_datatype }},
     {% endfor %}
 }
 

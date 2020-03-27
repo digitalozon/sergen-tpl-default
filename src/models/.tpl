@@ -3,7 +3,7 @@ use serde::Serialize;
 #[derive(Queryable, Serialize)]
 pub struct {{ table.name_singular | title }} {
     {% for field in table.fields %}
-        pub {{ field.key }}: {{ field.datatype | to_rust_datatype }},
+        pub {{ field.key }}: {{ field | to_rust_datatype }},
     {% endfor %}
 }
 
