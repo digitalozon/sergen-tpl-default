@@ -31,13 +31,11 @@ pub fn post_{{ table.name_singular }}(
     let extractor = FieldValidator::validate(&new_{{ table.name_singular }});
 
     // Prepare all fields for inserting (validation)
-    // TODO: Hande Optional like this
-    // let <key> = extractor.extract("<key>", new_item.<key>);
     {% for field in table.fields %}{% if field.key == "id" %}{% continue %}{% endif -%}
         {% if field.required | to_bool -%}
             let {{ field.key }} = new_{{ table.name_singular }}.{{ field.key }};
         {% else -%}
-            let {{ field.key }} = extractor.extract("{{ field.key }}", new_{{ table.name_singular }}.{ field.key }});
+            let {{ field.key }} = extractor.extract("{{ field.key }}", new_{{ table.name_singular }}.{{ field.key }});
         {% endif %}
     {% endfor %}
 
