@@ -13,7 +13,7 @@ pub struct New{{ table.name_singular | title }} {
     {% for field in table.fields -%}
         {% if field.key == "id" -%}{% continue -%}{% endif -%}
         pub {{ field.key }}: {{ field | to_rust_datatype }},
-    {% endfor %}
+    {% endfor -%}
 }
 
 pub enum {{ table.name_singular | title }}CreationError {
@@ -34,15 +34,15 @@ impl From<Error> for {{ table.name_singular | title }}CreationError {
 
 pub fn create(
     conn: &Conn,
-    {% for field in table.fields %}
-    {% if field.key == "id" %}{% continue %}{% endif %}
+    {% for field in table.fields -%}
+    {% if field.key == "id" -%}{% continue -%}{% endif -%}
     {{ field.key }}: {{ field | to_rust_datatype }},
-    {% endfor %}
+    {% endfor -%}
 ) -> Result<{{ table.name_singular | title }}, {{ table.name_singular | title }}CreationError> {
 
     let new_{{ table.name_singular }} = &New{{ table.name_singular | title }} {
-        {% for field in table.fields %}
-           {% if field.key == "id" %}{% continue %}{% endif %}
+        {% for field in table.fields -%}
+           {% if field.key == "id" -%}{% continue -%}{% endif -%}
            {{ field.key }},
         {% endfor %}
     };
@@ -87,10 +87,10 @@ pub fn delete(conn: &Conn, id: i32) {
 #[derive(Deserialize, AsChangeset, Default, Clone)]
 #[table_name = "{{ table.name_plural }}"]
 pub struct Update{{ table.name_singular | title }}Data {
-    {% for field in table.fields %}
-    {% if field.key == "id" %}{% continue %}{% endif %}
+    {% for field in table.fields -%}
+    {% if field.key == "id" -%}{% continue -%}{% endif -%}
     pub {{ field.key }}: {{ field | to_rust_datatype }},
-    {% endfor %}
+    {% endfor -%}
 }
 
 pub fn update(conn: &Conn, id: i32, data: &Update{{ table.name_singular | title }}Data) -> Option<{{ table.name_singular | title }}> {
