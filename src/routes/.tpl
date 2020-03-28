@@ -31,7 +31,7 @@ pub fn post_{{ table.name_singular }}(
     let extractor = FieldValidator::validate(&new_{{ table.name_singular }});
 
     // Prepare all fields for inserting (validation)
-    {% for field in table.fields %}{% if field.key == "id" %}{% continue %}{% endif %}
+    {%- for field in table.fields %}{% if field.key == "id" %}{% continue %}{% endif %}
     {% if field.required | to_bool -%}
             let {{ field.key }} = new_{{ table.name_singular }}.{{ field.key }};
         {%- else -%}
