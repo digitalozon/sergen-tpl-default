@@ -4,7 +4,7 @@ use rocket_contrib::databases::diesel;
 pub mod {{table.name_plural}};
 {% endfor -%}
 
-{% if database_type == "sqlite" %}
+{%- if database_type == "sqlite" %}
 {% set db_conn = "Sqlite" %}
 {% set db_pck = "sqlite" %}
 {% elif database_type == "postgres" %}
