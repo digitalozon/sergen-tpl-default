@@ -54,12 +54,13 @@ pub fn rocket() -> rocket::Rocket {
         .mount(
             "/api",
             routes![
-                {% for table in tables %}
+                {% for table in tables -%}
                    routes::{{table.name_plural}}::post_{{table.name_singular}},
                    routes::{{table.name_plural}}::put_{{table.name_singular}},
                    routes::{{table.name_plural}}::get_{{table.name_plural}},
                    routes::{{table.name_plural}}::get_{{table.name_singular}},
                    routes::{{table.name_plural}}::delete_{{table.name_singular}},
+
                 {% endfor %}
             ], // TODO: POST list, PUT list, DELETE list
         )
