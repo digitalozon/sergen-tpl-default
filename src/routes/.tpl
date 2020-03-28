@@ -32,7 +32,7 @@ pub fn post_{{ table.name_singular }}(
 
     // Prepare all fields for inserting (validation)
     // TODO: Hande Optional like this
-    // let {{ field.key }} = extractor.extract("{{ field.key }}", new_{{ table.name_singular }}.{{ field.key }});
+    // let <key> = extractor.extract("<key>", new_item.<key>);
     {% for field in table.fields %} {% if field.key == "id" %}{% continue %}{% endif -%}
         let {{ field.key }} = new_{{ table.name_singular }}.{{ field.key }};
     {% endfor %}
