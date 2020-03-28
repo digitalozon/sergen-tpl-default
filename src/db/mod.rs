@@ -2,7 +2,7 @@ use rocket_contrib::databases::diesel;
 
 {% for table in tables -%}
 pub mod {{table.name_plural}};
-{% endfor %}
+{% endfor -%}
 
 {%- if database_type == "sqlite" %}
 {% set db_conn = "Sqlite" %}
@@ -13,7 +13,7 @@ pub mod {{table.name_plural}};
 {% else %}
 {% set db_conn = "Pg" %}
 {% set db_pck = "pg" %}
-{%- endif -%}
+{% endif %}
 
 #[database("diesel_{{ database_type }}_pool")]
 pub struct Conn(diesel::{{ db_conn }}Connection);
