@@ -37,7 +37,7 @@ pub fn post_{{ table.name_singular }}(
         {% else -%}
             let {{ field.key }} = extractor.extract("{{ field.key }}", new_{{ table.name_singular }}.{{ field.key }});
         {% endif -%}
-    {% endfor %}
+    {%- endfor %}
 
     extractor.check()?;
 
