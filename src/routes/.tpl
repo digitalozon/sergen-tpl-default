@@ -6,7 +6,7 @@ use validator::Validate;
 use crate::auth::{ApiKey, Auth};
 use crate::config::AppState;
 use crate::db::{self, {{ table.name_plural }}::{{ table.name_singular | title }}CreationError};
-use crate::errors::{Errors, FieldValidator};
+use crate::errors::Errors;
 
 #[derive(Deserialize)]
 pub struct New{{ table.name_singular | title }} {

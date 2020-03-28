@@ -58,6 +58,7 @@ impl Default for FieldValidator {
 }
 
 impl FieldValidator {
+    #[allow(dead_code)]
     pub fn validate<T: Validate>(model: &T) -> Self {
         Self {
             errors: model.validate().err().unwrap_or_else(ValidationErrors::new),
@@ -65,6 +66,7 @@ impl FieldValidator {
     }
 
     /// Convenience method to trigger early returns with ? operator.
+    #[allow(dead_code)]
     pub fn check(self) -> Result<(), Errors> {
         if self.errors.is_empty() {
             Ok(())
