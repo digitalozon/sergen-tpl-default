@@ -10,8 +10,8 @@ use serde::Deserialize;
 #[derive(Insertable)]
 #[table_name = "{{ table.name_plural }}"]
 pub struct New{{ table.name_singular | title }} {
-    {% for field in table.fields %}
-        {% if field.key == "id" %}{% continue %}{% endif %}
+    {% for field in table.fields -%}
+        {% if field.key == "id" -%}{% continue -%}{% endif -%}
         pub {{ field.key }}: {{ field | to_rust_datatype }},
     {% endfor %}
 }
