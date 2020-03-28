@@ -28,19 +28,17 @@ pub fn post_{{ table.name_singular }}(
 ) -> Result<JsonValue, Errors> {
     let new_{{ table.name_singular }} = new_{{ table.name_singular }}.into_inner().{{ table.name_singular }};
 
-    //let mut extractor = FieldValidator::validate(&new_{{ table.name_singular }});
+    {# let mut extractor = FieldValidator::validate(&new_{{ table.name_singular }}); #}
     // Prepare all fields for inserting (validation)
     {%- for field in table.fields %}{% if field.key == "id" %}{% continue %}{% endif %}
     {# TODO: Delete requirement check here if not needed, this is hadled by new item struct (field.required | to_bool <> true). #}
-    {% if true -%}
+    {%- if true -%}
             let {{ field.key }} = new_{{ table.name_singular }}.{{ field.key }};
         {%- else -%}
             let {{ field.key }} = extractor.extract("{{ field.key }}", new_{{ table.name_singular }}.{{ field.key }});
         {%- endif -%}
     {% endfor %}
-
-
-    extractor.check()?;
+    {# extractor.check()?;  #}
 
     db::{{ table.name_plural }}::create(&conn {% for field in table.fields %}{% if field.key == "id" %}{% continue %}{% endif %}, {{ field.key }} {% endfor %})
         .map(|{{ table.name_singular }}| json!({ "{{ table.name_singular }}": {{ table.name_singular }}.before_insert() }))
