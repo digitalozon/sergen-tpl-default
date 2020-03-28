@@ -4,15 +4,9 @@ use rocket_contrib::databases::diesel;
 pub mod {{table.name_plural}};
 {% endfor -%}
 
-{%- if database_type == "sqlite" %}
-{% set db_conn = "Sqlite" %}
-{% set db_pck = "sqlite" %}
-{% elif database_type == "postgres" %}
-{% set db_conn = "Pg" %}
-{% set db_pck = "pg" %}
-{% else %}
-{% set db_conn = "Pg" %}
-{% set db_pck = "pg" %}
+{%- if database_type == "sqlite" %}{% set db_conn = "Sqlite" %}{% set db_pck = "sqlite" %}
+{% elif database_type == "postgres" %}{% set db_conn = "Pg" %}{% set db_pck = "pg" %}
+{% else %}{% set db_conn = "Pg" %}{% set db_pck = "pg" %}
 {%- endif -%}
 
 #[database("diesel_{{ database_type }}_pool")]
