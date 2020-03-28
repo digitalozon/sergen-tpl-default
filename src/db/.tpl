@@ -13,7 +13,7 @@ pub struct New{{ table.name_singular | title }} {
     {% for field in table.fields -%}
         {% if field.key == "id" -%}{% continue -%}{% endif -%}
         pub {{ field.key }}: {{ field | to_rust_datatype }},
-    {%- endfor %}
+    {% endfor %}
 }
 
 pub enum {{ table.name_singular | title }}CreationError {
