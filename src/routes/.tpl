@@ -36,7 +36,7 @@ pub fn post_{{ table.name_singular }}(
     {% for field in table.fields %}{% if field.key == "id" %}{% continue %}{% endif -%}
         {% if field.required | to_bool %}
             let {{ field.key }} = new_{{ table.name_singular }}.{{ field.key }};
-        {% elseif %}
+        {% elif %}
             let { field.key }} = extractor.extract("{ field.key }}", new_{{ table.name_singular }}.{ field.key }});
         {% endif %}
     {% endfor %}
